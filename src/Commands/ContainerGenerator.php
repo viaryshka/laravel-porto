@@ -5,6 +5,9 @@ namespace AdminKit\Porto\Commands;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * @named-arguments-supported 'name', 'container', 'folder'
+ */
 class ContainerGenerator extends AbstractGeneratorCommand
 {
     protected $signature = 'make:porto-container {name} {folder=Containers}';
@@ -21,7 +24,7 @@ class ContainerGenerator extends AbstractGeneratorCommand
         ];
     }
 
-    public function handle(): void
+    public function handle()
     {
         // without using parent::handle();
 
@@ -55,7 +58,6 @@ class ContainerGenerator extends AbstractGeneratorCommand
     {
         $this->addArgument(name: 'container', default: Str::ucfirst(Str::singular($this->argument('name'))));
         $this->makeFileInContainer('Providers/MainServiceProvider.php', 'main.service.provider.stub');
-        $this->makeFileInContainer('Providers/FilamentServiceProvider.php', 'filament.service.provider.stub');
         $this->makeFileInContainer('Providers/RouteServiceProvider.php', 'route.service.provider.stub');
         $this->importMainProviderToShipProvider();
     }

@@ -19,7 +19,7 @@ class MigrationGenerator extends AbstractGeneratorCommand
     public function handle()
     {
         if ($this->checkMigrationFileExists()) {
-            return;
+            return null;
         }
 
         parent::handle();

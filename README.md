@@ -6,10 +6,11 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/ibecsystems/laravel-porto.svg?style=flat-square)](https://packagist.org/packages/ibecsystems/laravel-porto)
 
 ## Roadmap
+
 - [ ] Ship folder generator
 - [x] Подумать над авторегистрацией MainServiceProvider (импорт в ShipProvider)
 - [ ] Убрать RouteServiceProvider
-- [ ] Внедрить Filament v3
+- [x] Внедрить Filament v3
 - [ ] Обновить документацию по Porto (как работает пакет)
 
 ## Installation
@@ -29,6 +30,7 @@ php artisan vendor:publish --tag="porto-config"
 ## Usage
 
 Standard Container's Structure:
+
 ```
 Container
 	├── Actions

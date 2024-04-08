@@ -8,6 +8,5 @@ class MainServiceProvider extends AbstractMainServiceProvider
 {
     protected array $serviceProviders = [
         RouteServiceProvider::class,
-        FilamentServiceProvider::class,
     ];
 }
