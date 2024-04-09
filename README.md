@@ -1,8 +1,8 @@
 # This package implements the Porto, a modern Software Architectural Pattern
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ibecsystems/laravel-porto.svg?style=flat-square)](https://packagist.org/packages/ibecsystems/laravel-porto)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ibec-box/laravel-porto/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/ibec-box/laravel-porto/actions?query=workflow:run-tests+branch:2.x)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ibec-box/laravel-porto/fix-php-code-style-issues.yml?branch=2.x&label=code%20style&style=flat-square)](https://github.com/ibec-box/laravel-porto/actions?query=workflow:"Fix+PHP+code+style+issues"+branch:2.x)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ibec-box/laravel-porto/run-tests.yml?branch=3.x&label=tests&style=flat-square)](https://github.com/ibec-box/laravel-porto/actions?query=workflow:run-tests+branch:3.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ibec-box/laravel-porto/fix-php-code-style-issues.yml?branch=3.x&label=code%20style&style=flat-square)](https://github.com/ibec-box/laravel-porto/actions?query=workflow:"Fix+PHP+code+style+issues"+branch:3.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/ibecsystems/laravel-porto.svg?style=flat-square)](https://packagist.org/packages/ibecsystems/laravel-porto)
 
 ## Roadmap
