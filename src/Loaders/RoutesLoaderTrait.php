@@ -94,7 +94,7 @@ trait RoutesLoaderTrait
     }
 
     /**
-     * @return  mixed
+     * @return mixed
      */
     private function getApiUrl()
     {
