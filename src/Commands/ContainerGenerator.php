@@ -58,7 +58,6 @@ class ContainerGenerator extends AbstractGeneratorCommand
     {
         $this->addArgument(name: 'container', default: Str::ucfirst(Str::singular($this->argument('name'))));
         $this->makeFileInContainer('Providers/MainServiceProvider.php', 'main.service.provider.stub');
-        $this->makeFileInContainer('Providers/RouteServiceProvider.php', 'route.service.provider.stub');
         $this->importMainProviderToShipProvider();
     }
 }

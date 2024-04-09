@@ -9,21 +9,7 @@ abstract class PortoMainServiceProvider extends LaravelServiceProvider
 {
     use AutoLoaderTrait;
 
-    /**
-     * Path to the container
-     */
-    protected string $containerPath;
-
-    /**
-     * List of service providers to load
-     */
     protected array $serviceProviders = [];
-
-    public function __construct($app)
-    {
-        $this->containerPath = realpath(dirname((new \ReflectionClass($this))->getFileName()).'/..');
-        parent::__construct($app);
-    }
 
     public function register(): void
     {

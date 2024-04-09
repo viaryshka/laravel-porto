@@ -15,10 +15,10 @@ trait RoutesLoaderTrait
     /**
      * Register all the containers routes files in the framework
      */
-    public function runRoutesAutoLoader(): void
+    public function runRoutesAutoLoader($containerPath): void
     {
-        $this->loadApiContainerRoutes($this->containerPath);
-        $this->loadWebContainerRoutes($this->containerPath);
+        $this->loadApiContainerRoutes($containerPath);
+        $this->loadWebContainerRoutes($containerPath);
     }
 
     /**
