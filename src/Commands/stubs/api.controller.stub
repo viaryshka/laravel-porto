@@ -1,34 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace {{ namespace }};
 
 {{ useNamespaces }}
+use App\Containers\{{ name }}\UI\API\RequestDTO\Create{{ name }}RequestDTO;
+use App\Containers\{{ name }}\UI\API\RequestDTO\Update{{ name }}RequestDTO;
 use App\Ship\Abstracts\Controllers\AbstractApiController;
 
+/**
+ * @tags {{ name }}
+ */
 class {{ class }} extends AbstractApiController
 {
+    {{ phpDocOfIndexFunction }}
     public function index()
     {
         {{ bodyOfIndexFunction }}
     }
 
-    public function store({{ storeRequestName }} $request)
+    {{ phpDocOfStoreFunction }}
+    public function store(Create{{ name }}RequestDTO $requestDTO)
     {
-        //
+        {{ bodyOfStoreFunction }}
     }
 
+    {{ phpDocOfShowFunction }}
     public function show(string $id)
     {
         {{ bodyOfShowFunction }}
     }
 
-    public function update({{ updateRequestName }} $request, string $id)
+    {{ phpDocOfUpdateFunction }}
+    public function update(Update{{ name }}RequestDTO $requestDTO, string $id)
     {
-        //
+        {{ bodyOfUpdateFunction }}
     }
 
+    {{ phpDocOfDestroyFunction }}
     public function destroy(string $id)
     {
-        //
+        {{ bodyOfDestroyFunction }}
     }
 }

@@ -8,14 +8,14 @@ class ApiRequestGenerator extends AbstractGeneratorCommand
 
     protected $description = 'Create a new Request class';
 
-    protected $type = 'Request';
+    protected $type = 'RequestDTO';
 
     protected $stubName = 'api.request.stub';
 
-    protected $folderInsideContainer = 'UI/API/Requests';
+    protected $folderInsideContainer = 'UI/API/RequestDTO';
 
     protected function getNameInput()
     {
-        return parent::getNameInput().'Request';
+        return parent::getNameInput().'RequestDTO';
     }
 }
