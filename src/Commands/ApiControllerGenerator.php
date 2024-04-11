@@ -26,47 +26,72 @@ class ApiControllerGenerator extends AbstractGeneratorCommand
             'folder' => $this->argument('folder'),
         ];
 
-        if ($this->option('requests')) {
+        if ($this->option('actions')) {
+            $this->call('make:porto-api-dto', $arguments);
+
             $this->call('make:porto-api-request', array_merge($arguments, ['name' => "Create$name"]));
             $this->call('make:porto-api-request', array_merge($arguments, ['name' => "Update$name"]));
-        }
 
-        if ($this->option('resource')) {
-            $this->call('make:porto-api-resource', $arguments);
+            $this->call('make:porto-api-action', $this->getListAction());
+            $this->call('make:porto-api-action', $this->createAction());
+            $this->call('make:porto-api-action', $this->getByIdAction());
+            $this->call('make:porto-api-action', $this->updateByIdAction());
+            $this->call('make:porto-api-action', $this->deleteByIdAction());
+
         }
     }
 
     protected function getVariables()
     {
         $name = $this->argument('name');
-        $storeRequestName = $updateRequestName = 'Request';
-        $useNamespaces = 'use Illuminate\Http\Request;';
+        $useNamespaces = '';
         $bodyOfIndexFunction = '//';
+        $bodyOfStoreFunction = '//';
         $bodyOfShowFunction = '//';
+        $bodyOfUpdateFunction = '//';
+        $bodyOfDestroyFunction = '//';
+        $phpDocOfIndexFunction = "/**\n     * Get $name list\n     */";
+        $phpDocOfStoreFunction = "/**\n     * Create $name\n     */";
+        $phpDocOfShowFunction = "/**\n     * Get $name by ID\n     */";
+        $phpDocOfUpdateFunction = "/**\n     * Update $name by ID\n     */";
+        $phpDocOfDestroyFunction = "/**\n     * Delete $name by ID\n     */";
 
-        if ($this->option('requests')) {
-            $storeRequestName = "Create{$name}Request";
-            $updateRequestName = "Update{$name}Request";
-            $useNamespaces = 'use '.$this->getContainerNamespace()."\\UI\\API\\Requests\\$storeRequestName;\n";
-            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Requests\\$updateRequestName;";
-        }
+        if ($this->option('actions')) {
+            $useNamespaces = 'use '.$this->getContainerNamespace()."\\UI\\API\\Actions\\Create{$name}Action;\n";
+            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Actions\\Delete{$name}ByIdAction;\n";
+            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Actions\\Get{$name}ByIdAction;\n";
+            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Actions\\Get{$name}ListAction;\n";
+            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Actions\\Update{$name}ByIdAction;\n";
+            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\DTO\\{$name}DTO;";
 
-        if ($this->option('resource')) {
-            $modelName = $name;
-            $resourceName = "{$name}Resource";
-            $useNamespaces .= "\n";
-            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\UI\\API\\Resources\\$resourceName;\n";
-            $useNamespaces .= 'use '.$this->getContainerNamespace()."\\Models\\$modelName;";
-            $bodyOfIndexFunction = "return $resourceName::collection($modelName::all());";
-            $bodyOfShowFunction = "return $resourceName::make($modelName::findOrFail(\$id));";
+            $bodyOfIndexFunction = "return app(Get{$name}ListAction::class)->run();";
+            $bodyOfStoreFunction = "return app(Create{$name}Action::class)->run(\$requestDTO)\n            ->only('id');";
+            $bodyOfShowFunction = "return app(Get{$name}ByIdAction::class)->run(\$id);";
+            $bodyOfUpdateFunction = "return app(Update{$name}ByIdAction::class)->run(\$requestDTO, \$id)\n            ->only('id');";
+            $bodyOfDestroyFunction = "app(Delete{$name}ByIdAction::class)->run(\$id);\n\nreturn response()->noContent();";
+
+            $phpDocOfIndexFunction = "/**\n     * Get $name list\n     *\n     * @return {$name}DTO[]\n     */";
+            $phpDocOfStoreFunction = "/**\n     * Create $name\n     *\n     * @return array{id: string}\n     */";
+            $phpDocOfShowFunction = "/**\n     * Get $name by ID\n     *\n     * @return {$name}DTO\n     */";
+            $phpDocOfUpdateFunction = "/**\n     * Update $name by ID\n     *\n     * @return array{id: string}\n     */";
+            $phpDocOfDestroyFunction = "/**\n     * Delete $name by ID\n     */";
         }
 
         return [
+            '{{ name }}' => $name,
             '{{ useNamespaces }}' => $useNamespaces,
-            '{{ storeRequestName }}' => $storeRequestName,
-            '{{ updateRequestName }}' => $updateRequestName,
+
             '{{ bodyOfIndexFunction }}' => $bodyOfIndexFunction,
+            '{{ bodyOfStoreFunction }}' => $bodyOfStoreFunction,
             '{{ bodyOfShowFunction }}' => $bodyOfShowFunction,
+            '{{ bodyOfUpdateFunction }}' => $bodyOfUpdateFunction,
+            '{{ bodyOfDestroyFunction }}' => $bodyOfDestroyFunction,
+
+            '{{ phpDocOfIndexFunction }}' => $phpDocOfIndexFunction,
+            '{{ phpDocOfStoreFunction }}' => $phpDocOfStoreFunction,
+            '{{ phpDocOfShowFunction }}' => $phpDocOfShowFunction,
+            '{{ phpDocOfUpdateFunction }}' => $phpDocOfUpdateFunction,
+            '{{ phpDocOfDestroyFunction }}' => $phpDocOfDestroyFunction,
         ];
     }
 
@@ -78,8 +103,114 @@ class ApiControllerGenerator extends AbstractGeneratorCommand
     protected function getOptions()
     {
         return [
-            ['resource', 'r', InputOption::VALUE_NONE, 'Create new resource class'],
-            ['requests', 'R', InputOption::VALUE_NONE, 'Create new form request classes'],
+            ['actions', 'a', InputOption::VALUE_NONE, 'Create new action classes'],
+        ];
+    }
+
+    private function getListAction(): array
+    {
+        $name = $this->argument('name');
+
+        $useNamespaces = "use {$this->getContainerNamespace()}\\Models\\$name;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\DTO\\{$name}DTO;\n";
+        $useNamespaces .= 'use Spatie\\LaravelData\\DataCollection;';
+
+        $arguments = '';
+        $return = ': DataCollection';
+        $body = "return {$name}DTO::collect($name::all(), DataCollection::class);";
+
+        return [
+            'name' => "Get{$name}List",
+            'container' => $this->argument('container'),
+            'folder' => $this->argument('folder'),
+            'use-namespaces' => $useNamespaces,
+            'run-function' => "public function run($arguments)$return\n    {\n        $body\n    }\n",
+        ];
+    }
+
+    private function createAction(): array
+    {
+        $name = $this->argument('name');
+
+        $useNamespaces = "use {$this->getContainerNamespace()}\\Models\\$name;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\DTO\\{$name}DTO;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\RequestDTO\\Create{$name}RequestDTO;";
+
+        $arguments = "Create{$name}RequestDTO \$requestDTO";
+        $return = ": {$name}DTO";
+        $body = "return {$name}DTO::from($name::create(\$requestDTO->toArray()));";
+
+        return [
+            'name' => "Create{$name}",
+            'container' => $this->argument('container'),
+            'folder' => $this->argument('folder'),
+            'use-namespaces' => $useNamespaces,
+            'run-function' => "public function run($arguments)$return\n    {\n        $body\n    }\n",
+        ];
+    }
+
+    private function getByIdAction(): array
+    {
+        $name = $this->argument('name');
+
+        $useNamespaces = "use {$this->getContainerNamespace()}\\Models\\$name;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\DTO\\{$name}DTO;\n";
+
+        $arguments = 'string $id';
+        $return = ": {$name}DTO";
+        $body = "return {$name}DTO::from($name::findOrFail(\$id));";
+
+        return [
+            'name' => "Get{$name}ById",
+            'container' => $this->argument('container'),
+            'folder' => $this->argument('folder'),
+            'use-namespaces' => $useNamespaces,
+            'run-function' => "public function run($arguments)$return\n    {\n        $body\n    }\n",
+        ];
+    }
+
+    private function updateByIdAction(): array
+    {
+        $name = $this->argument('name');
+
+        $useNamespaces = "use {$this->getContainerNamespace()}\\Models\\$name;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\DTO\\{$name}DTO;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\RequestDTO\\Update{$name}RequestDTO;";
+
+        $arguments = "Update{$name}RequestDTO \$requestDTO, string \$id";
+        $return = ": {$name}DTO";
+        $body = "\$item = $name::findOrFail(\$id);
+        \$item->update(\$requestDTO->toArray());
+
+        return {$name}DTO::from(\$item);";
+
+        return [
+            'name' => "Update{$name}ById",
+            'container' => $this->argument('container'),
+            'folder' => $this->argument('folder'),
+            'use-namespaces' => $useNamespaces,
+            'run-function' => "public function run($arguments)$return\n    {\n        $body\n    }\n",
+        ];
+    }
+
+    private function deleteByIdAction(): array
+    {
+        $name = $this->argument('name');
+
+        $useNamespaces = "use {$this->getContainerNamespace()}\\Models\\$name;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\DTO\\{$name}DTO;\n";
+        $useNamespaces .= "use {$this->getContainerNamespace()}\\UI\\API\\RequestDTO\\Update{$name}RequestDTO;";
+
+        $arguments = 'string $id';
+        $return = ': ?bool';
+        $body = "return $name::findOrFail(\$id)->delete();";
+
+        return [
+            'name' => "Delete{$name}ById",
+            'container' => $this->argument('container'),
+            'folder' => $this->argument('folder'),
+            'use-namespaces' => $useNamespaces,
+            'run-function' => "public function run($arguments)$return\n    {\n        $body\n    }\n",
         ];
     }
 }

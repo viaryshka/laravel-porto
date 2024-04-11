@@ -2,7 +2,9 @@
 
 namespace AdminKit\Porto;
 
+use AdminKit\Porto\Commands\ApiActionGenerator;
 use AdminKit\Porto\Commands\ApiControllerGenerator;
+use AdminKit\Porto\Commands\ApiDTOGenerator;
 use AdminKit\Porto\Commands\ApiRequestGenerator;
 use AdminKit\Porto\Commands\ApiResourceGenerator;
 use AdminKit\Porto\Commands\ApiRoutesGenerator;
@@ -32,6 +34,8 @@ class PortoServiceProvider extends PackageServiceProvider
                 ApiRequestGenerator::class,
                 FilamentResourceGenerator::class,
                 ContainerGenerator::class,
+                ApiActionGenerator::class,
+                ApiDTOGenerator::class,
             ])
             ->hasConfigFile();
     }

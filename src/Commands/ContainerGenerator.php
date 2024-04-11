@@ -37,7 +37,7 @@ class ContainerGenerator extends AbstractGeneratorCommand
         $this->call('make:porto-migration', $arguments);
         $this->call('make:porto-model', $arguments);
         $this->call('make:porto-factory', $arguments);
-        $this->call('make:porto-api-controller', [...$arguments, '-r' => true, '-R' => true]);
+        $this->call('make:porto-api-controller', [...$arguments, '--actions' => true]);
         $this->call('make:porto-api-routes', $arguments);
         $this->call('make:porto-filament-resource', $arguments);
 

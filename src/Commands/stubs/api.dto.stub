@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use App\Ship\Abstracts\DTO\AbstractData;
+use Carbon\Carbon;
+
+class {{ class }} extends AbstractData
+{
+    public function __construct(
+        public int $id,
+        // Add your DTO properties here
+        public Carbon $created_at,
+        public Carbon $updated_at,
+    ) {
+    }
+}
