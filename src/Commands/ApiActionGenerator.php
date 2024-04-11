@@ -18,7 +18,7 @@ class ApiActionGenerator extends AbstractGeneratorCommand
 
     protected function getNameInput()
     {
-        return parent::getNameInput().'Action';
+        return parent::getNameInput().$this->type;
     }
 
     protected function getArguments()
