@@ -7,7 +7,7 @@
 
 ## Roadmap
 
-- [ ] Ship folder generator
+- [x] Ship folder generator
 - [x] Подумать над авторегистрацией MainServiceProvider (импорт в ShipProvider)
 - [x] Убрать RouteServiceProvider
 - [x] Внедрить Filament v3
