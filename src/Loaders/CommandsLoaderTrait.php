@@ -10,7 +10,9 @@ trait CommandsLoaderTrait
 
     public function loadCommandsFromContainers($containerPath): void
     {
+        $shipCommandsDirectory = $containerPath.'/Commands';
         $containerCommandsDirectory = $containerPath.'/UI/CLI/Commands';
+        $this->loadTheConsoles($shipCommandsDirectory);
         $this->loadTheConsoles($containerCommandsDirectory);
     }
 
