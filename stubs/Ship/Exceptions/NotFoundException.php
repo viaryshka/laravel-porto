@@ -2,10 +2,10 @@
 
 namespace App\Ship\Exceptions;
 
-use App\Ship\Abstracts\Exceptions\Exception;
+use App\Ship\Abstracts\Exceptions\AbstractException;
 use Symfony\Component\HttpFoundation\Response;
 
-class NotFoundException extends Exception
+class NotFoundException extends AbstractException
 {
     protected $code = Response::HTTP_NOT_FOUND;
 

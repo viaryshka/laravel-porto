@@ -2,10 +2,10 @@
 
 namespace App\Ship\Exceptions;
 
-use App\Ship\Abstracts\Exceptions\Exception;
+use App\Ship\Abstracts\Exceptions\AbstractException;
 use Symfony\Component\HttpFoundation\Response;
 
-class ValidationFailedException extends Exception
+class ValidationFailedException extends AbstractException
 {
     protected $code = Response::HTTP_UNPROCESSABLE_ENTITY;
 
