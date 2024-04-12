@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AdminKit\Porto\Commands;
 
+use AdminKit\Porto\Actions\AddItemToFileArrayAction;
+use AdminKit\Porto\DTO\AddItemToFileArrayDTO;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
@@ -22,10 +24,14 @@ class PortoInstallCommand extends Command
     public function handle()
     {
         $this->copyShipFolder();
+
+        $this->importShipProvider();
     }
 
     private function copyShipFolder(): void
     {
+        $this->info("Copying Ship folder...\n");
+
         $stubPath = __DIR__.'/../../stubs/Ship';
         $shipPath = app_path('Ship');
 
@@ -58,6 +64,34 @@ class PortoInstallCommand extends Command
             $this->info("$n. File: Ship/{$file->getRelativePathname()} - has been copied successfully.");
         }
 
-        $this->info("\nThe Ship folder has been copied successfully.");
+        $this->info("\nThe Ship folder has been copied successfully.\n");
+    }
+
+    private function importShipProvider(): void
+    {
+        $this->info("Importing ShipProvider...\n");
+
+        if (! $this->file->exists(base_path('bootstrap/providers.php'))) {
+            $this->error("The bootstrap/providers.php file does not exist.\n");
+        }
+
+        $result = app(AddItemToFileArrayAction::class)->run(AddItemToFileArrayDTO::from([
+            'appendRow' => 'App\\Ship\\Providers\\ShipProvider::class,',
+            'destinationFilePath' => base_path('bootstrap/providers.php'),
+        ]));
+
+        if ($result === true) {
+            $this->info("The ShipProvider has already imported.\n");
+
+            return;
+        }
+
+        if ($result === false) {
+            $this->error("Failed to import the ShipProvider.\n");
+
+            return;
+        }
+
+        $this->info("The ShipProvider has been imported successfully.\n");
     }
 }
