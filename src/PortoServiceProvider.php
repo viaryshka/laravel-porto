@@ -13,6 +13,7 @@ use AdminKit\Porto\Commands\FactoryGenerator;
 use AdminKit\Porto\Commands\FilamentResourceGenerator;
 use AdminKit\Porto\Commands\MigrationGenerator;
 use AdminKit\Porto\Commands\ModelGenerator;
+use AdminKit\Porto\Commands\PortoInstallCommand;
 use AdminKit\Porto\Commands\ProviderGenerator;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -24,6 +25,7 @@ class PortoServiceProvider extends PackageServiceProvider
         $package
             ->name('porto')
             ->hasCommands([
+                PortoInstallCommand::class,
                 ProviderGenerator::class,
                 MigrationGenerator::class,
                 ModelGenerator::class,
