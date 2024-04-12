@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminKit\Porto\Commands;
+namespace AdminKit\Porto\GeneratorCommands;
 
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;

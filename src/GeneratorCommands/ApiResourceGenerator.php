@@ -1,6 +1,6 @@
 <?php
 
-namespace AdminKit\Porto\Commands;
+namespace AdminKit\Porto\GeneratorCommands;
 
 class ApiResourceGenerator extends AbstractGeneratorCommand
 {
