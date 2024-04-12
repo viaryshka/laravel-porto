@@ -3,4 +3,4 @@ parameters:
 		-
 			message: "#^Command \"make\\:porto\\-container\" does not have argument \"container\"\\.$#"
 			count: 3
-			path: src/Commands/AbstractGeneratorCommand.php
+			path: src/GeneratorCommands/AbstractGeneratorCommand.php
