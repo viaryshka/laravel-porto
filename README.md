@@ -13,11 +13,11 @@
 
 ## Roadmap
 
-- [x] Ship folder generator
-- [x] Подумать над авторегистрацией MainServiceProvider (импорт в ShipProvider)
-- [x] Убрать RouteServiceProvider
-- [x] Внедрить Filament v3
-- [x] Обновить документацию по Porto (как работает пакет)
+- [x] Add Ship folder generator command
+- [x] Auto import MainServiceProvider to ShipProvider
+- [x] Remove RouteServiceProvider
+- [x] Support Filament v3, add FilamentPlugin to generator
+- [x] Update Porto installing documentation
 
 ## Installation
 
