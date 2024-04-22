@@ -80,6 +80,7 @@ class ApiControllerGenerator extends AbstractGeneratorCommand
         return [
             '{{ name }}' => $name,
             '{{ useNamespaces }}' => $useNamespaces,
+            '{{ containerNamespace }}' => $this->getContainerNamespace(),
 
             '{{ bodyOfIndexFunction }}' => $bodyOfIndexFunction,
             '{{ bodyOfStoreFunction }}' => $bodyOfStoreFunction,

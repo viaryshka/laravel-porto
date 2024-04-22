@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace {{ namespace }};
 
 {{ useNamespaces }}
-use App\Containers\{{ name }}\UI\API\RequestDTO\Create{{ name }}RequestDTO;
-use App\Containers\{{ name }}\UI\API\RequestDTO\Update{{ name }}RequestDTO;
+use {{ containerNamespace }}\UI\API\RequestDTO\Create{{ name }}RequestDTO;
+use {{ containerNamespace }}\UI\API\RequestDTO\Update{{ name }}RequestDTO;
 use App\Ship\Abstracts\Controllers\AbstractApiController;
 
 /**

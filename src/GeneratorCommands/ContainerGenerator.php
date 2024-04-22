@@ -43,11 +43,14 @@ class ContainerGenerator extends AbstractGeneratorCommand
 
     public function handle()
     {
+        $name = Str::ucfirst(Str::singular(Str::camel($this->argument('name'))));
+        $this->addArgument(name: 'container', default: $name);
+
         // without using parent::handle();
 
         $arguments = [
-            'name' => Str::ucfirst(Str::singular($this->argument('name'))),
-            'container' => $this->argument('name'),
+            'name' => $name,
+            'container' => $this->argument('container'),
             'folder' => $this->argument('folder'),
         ];
 
@@ -66,7 +69,6 @@ class ContainerGenerator extends AbstractGeneratorCommand
 
     protected function makeProviders()
     {
-        $this->addArgument(name: 'container', default: Str::ucfirst(Str::singular($this->argument('name'))));
         $this->makeFileInContainer('Providers/MainServiceProvider.php', 'main.service.provider.stub');
         $this->importMainProviderToShipProvider();
     }
