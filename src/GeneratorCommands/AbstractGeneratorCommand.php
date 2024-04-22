@@ -5,6 +5,10 @@ namespace AdminKit\Porto\GeneratorCommands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
 
 abstract class AbstractGeneratorCommand extends GeneratorCommand
 {
@@ -152,5 +156,13 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
             );
             file_put_contents($path, $mainProvider);
         }
+    }
+
+    protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        $input->setArgument('folder', text(
+            label: 'Would you like to specify a custom folder? (Optional)',
+            default: $this->argument('folder'),
+        ));
     }
 }

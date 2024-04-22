@@ -4,6 +4,10 @@ namespace AdminKit\Porto\GeneratorCommands;
 
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
 
 /**
  * @named-arguments-supported 'name', 'container', 'folder'
@@ -59,5 +63,13 @@ class ContainerGenerator extends AbstractGeneratorCommand
         $this->addArgument(name: 'container', default: Str::ucfirst(Str::singular($this->argument('name'))));
         $this->makeFileInContainer('Providers/MainServiceProvider.php', 'main.service.provider.stub');
         $this->importMainProviderToShipProvider();
+    }
+
+    protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        $input->setArgument('folder', text(
+            label: 'Would you like to specify a custom folder? (Optional)',
+            default: $this->argument('folder'),
+        ));
     }
 }

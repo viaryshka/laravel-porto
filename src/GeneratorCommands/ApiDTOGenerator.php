@@ -2,8 +2,6 @@
 
 namespace AdminKit\Porto\GeneratorCommands;
 
-use Symfony\Component\Console\Input\InputArgument;
-
 class ApiDTOGenerator extends AbstractGeneratorCommand
 {
     protected $name = 'make:porto-api-dto';
@@ -19,14 +17,5 @@ class ApiDTOGenerator extends AbstractGeneratorCommand
     protected function getNameInput()
     {
         return parent::getNameInput().'DTO';
-    }
-
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the '.strtolower($this->type)],
-            ['container', InputArgument::REQUIRED, 'The container name'],
-            ['folder', InputArgument::OPTIONAL, 'The folder name', 'Containers'],
-        ];
     }
 }
