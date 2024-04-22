@@ -5,8 +5,11 @@ namespace AdminKit\Porto\GeneratorCommands;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Laravel\Prompts\multiselect;
+use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 /**
@@ -14,17 +17,27 @@ use function Laravel\Prompts\text;
  */
 class ContainerGenerator extends AbstractGeneratorCommand
 {
-    protected $signature = 'make:porto-container {name} {folder=Containers}';
+    protected $name = 'make:porto-container';
 
     protected $description = 'Create a new Container';
 
     protected $type = 'Container';
+
+    protected $folderInsideContainer = 'Providers';
 
     protected function getArguments()
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the '.strtolower($this->type)],
             ['folder', InputArgument::OPTIONAL, 'The folder name', 'Containers'],
+        ];
+    }
+
+    protected function getOptions()
+    {
+        return [
+            //['filament2', 'f', InputOption::VALUE_NONE, 'Add filament v2 resource'],
+            ['filament3', 'F', InputOption::VALUE_NONE, 'Add filament v3 resource'],
         ];
     }
 
@@ -43,19 +56,12 @@ class ContainerGenerator extends AbstractGeneratorCommand
         $this->call('make:porto-factory', $arguments);
         $this->call('make:porto-api-controller', [...$arguments, '--actions' => true]);
         $this->call('make:porto-api-routes', $arguments);
-        $this->call('make:porto-filament-resource', $arguments);
+
+        if ($this->option('filament3')) {
+            $this->call('make:porto-filament-resource', $arguments);
+        }
 
         $this->makeProviders();
-    }
-
-    protected function getVariables()
-    {
-        return [
-            '{{ class }}' => $name = Str::ucfirst(Str::singular($this->argument('name'))),
-            '{{ namespace }}' => $this->getContainerNamespace().'\\Providers',
-            '{{ name }}' => Str::snake($name, '-'),
-            '{{ resourceNamespace }}' => $this->getContainerNamespace()."\\UI\\Filament\\Resources\\{$name}Resource",
-        ];
     }
 
     protected function makeProviders()
@@ -71,5 +77,29 @@ class ContainerGenerator extends AbstractGeneratorCommand
             label: 'Would you like to specify a custom folder? (Optional)',
             default: $this->argument('folder'),
         ));
+
+        if ($this->didReceiveOptions($input)) {
+            return;
+        }
+
+        collect(multiselect('Would you like any of the following?', [
+            'filament' => 'Filament',
+        ]))->each(function ($option) use ($input) {
+            if ($option === 'filament') {
+                $filamentVersion = select(
+                    label: 'Which version of filament would you like?',
+                    options: [
+                        //'filament2' => 'Filament v2',
+                        'filament3' => 'Filament v3',
+                    ],
+                    default: 'filament3',
+                );
+                $input->setOption($filamentVersion, true);
+
+                return;
+            }
+
+            $input->setOption($option, true);
+        });
     }
 }
