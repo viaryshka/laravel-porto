@@ -48,7 +48,7 @@ class ContainerGenerator extends AbstractGeneratorCommand
         if ($this->option('filament2') && $this->option('filament3')) {
             $this->error('You can choose only one Filament version, --filament2 or --filament3');
 
-            return;
+            return null;
         }
 
         $name = Str::ucfirst(Str::singular(Str::camel($this->argument('name'))));
@@ -82,6 +82,7 @@ class ContainerGenerator extends AbstractGeneratorCommand
         if ($this->option('filament3')) {
             $this->call('make:porto-filament-resource', $arguments);
         }
+
     }
 
     protected function makeProviders(): void
