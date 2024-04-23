@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace AdminKit\Porto\Actions;
 
-use AdminKit\Porto\DTO\AddItemToFileArrayDTO;
+use AdminKit\Porto\DTO\AppendRowToFileDTO;
 use Illuminate\Support\Str;
 
-class AddItemToFileArrayAction
+class AppendRowToFileArrayAction
 {
-    public function run(AddItemToFileArrayDTO $dto): int|bool
+    public function run(AppendRowToFileDTO $dto): int|bool
     {
+        if (! file_exists($dto->destinationFilePath)) {
+            return false;
+        }
+
         $fileContent = file_get_contents($dto->destinationFilePath);
 
         // get content
