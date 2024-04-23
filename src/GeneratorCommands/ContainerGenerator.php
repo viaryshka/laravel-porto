@@ -36,9 +36,10 @@ class ContainerGenerator extends AbstractGeneratorCommand
     protected function getOptions()
     {
         return [
-            ['api', 'a', InputOption::VALUE_NONE, 'Add API resources'],
+            ['model', 'm', InputOption::VALUE_NONE, 'Add Model files'],
+            ['api', 'a', InputOption::VALUE_NONE, 'Add API files'],
             //['filament2', 'f', InputOption::VALUE_NONE, 'Add filament v2 resource'],
-            ['filament3', 'F', InputOption::VALUE_NONE, 'Add filament v3 resource'],
+            ['filament3', 'F', InputOption::VALUE_NONE, 'Add Filament v3 resource'],
         ];
     }
 
@@ -55,9 +56,11 @@ class ContainerGenerator extends AbstractGeneratorCommand
             'folder' => $this->argument('folder'),
         ];
 
-        $this->call('make:porto-migration', $arguments);
-        $this->call('make:porto-model', $arguments);
-        $this->call('make:porto-factory', $arguments);
+        if ($this->option('model')) {
+            $this->call('make:porto-migration', $arguments);
+            $this->call('make:porto-model', $arguments);
+            $this->call('make:porto-factory', $arguments);
+        }
 
         if ($this->option('api')) {
             $this->call('make:porto-api-controller', [...$arguments, '--actions' => true]);
@@ -88,10 +91,15 @@ class ContainerGenerator extends AbstractGeneratorCommand
             return;
         }
 
-        collect(multiselect('Would you like any of the following?', [
-            'api' => 'API',
-            'filament' => 'Filament',
-        ]))->each(function ($option) use ($input) {
+        collect(multiselect(
+            label: 'Would you like any of the following?',
+            options: [
+                'model' => 'Model',
+                'api' => 'API',
+                'filament' => 'Filament',
+            ],
+            default: ['model', 'api'],
+        ))->each(function ($option) use ($input) {
             if ($option === 'filament') {
                 $filamentVersion = select(
                     label: 'Which version of filament would you like?',
