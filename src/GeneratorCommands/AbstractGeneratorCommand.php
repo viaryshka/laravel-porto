@@ -92,11 +92,16 @@ abstract class AbstractGeneratorCommand extends GeneratorCommand
         }
     }
 
-    protected function getContainerPath()
+    protected function getContainerPath(string $path = ''): string
     {
         $containerName = Str::ucfirst(Str::camel($this->argument('container')));
+        $containerPath = app_path($this->argument('folder').DIRECTORY_SEPARATOR.$containerName);
 
-        return app_path($this->argument('folder').DIRECTORY_SEPARATOR.$containerName);
+        if ($path) {
+            $containerPath .= DIRECTORY_SEPARATOR.$path;
+        }
+
+        return $containerPath;
     }
 
     protected function importMainProviderToShipProvider(): void
