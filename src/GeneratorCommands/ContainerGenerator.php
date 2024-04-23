@@ -38,13 +38,19 @@ class ContainerGenerator extends AbstractGeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_NONE, 'Add Model files'],
             ['api', 'a', InputOption::VALUE_NONE, 'Add API files'],
-            //['filament2', 'f', InputOption::VALUE_NONE, 'Add filament v2 resource'],
-            ['filament3', 'F', InputOption::VALUE_NONE, 'Add Filament v3 resource'],
+            ['filament2', 'f', InputOption::VALUE_NONE, 'Add Filament v2 resource'],
+            ['filament3', 'F', InputOption::VALUE_NONE, 'Add new Filament v3 resource'],
         ];
     }
 
     public function handle()
     {
+        if ($this->option('filament2') && $this->option('filament3')) {
+            $this->error('You can choose only one Filament version, --filament2 or --filament3');
+
+            return;
+        }
+
         $name = Str::ucfirst(Str::singular(Str::camel($this->argument('name'))));
         $this->addArgument(name: 'container', default: $name);
 
@@ -55,6 +61,8 @@ class ContainerGenerator extends AbstractGeneratorCommand
             'container' => $this->argument('container'),
             'folder' => $this->argument('folder'),
         ];
+
+        $this->makeProviders();
 
         if ($this->option('model')) {
             $this->call('make:porto-migration', $arguments);
@@ -67,14 +75,16 @@ class ContainerGenerator extends AbstractGeneratorCommand
             $this->call('make:porto-api-routes', $arguments);
         }
 
+        if ($this->option('filament2')) {
+            $this->call('make:porto-filament2-resource', $arguments);
+        }
+
         if ($this->option('filament3')) {
             $this->call('make:porto-filament-resource', $arguments);
         }
-
-        $this->makeProviders();
     }
 
-    protected function makeProviders()
+    protected function makeProviders(): void
     {
         $this->makeFileInContainer('Providers/MainServiceProvider.php', 'main.service.provider.stub');
         $this->importMainProviderToShipProvider();
@@ -104,7 +114,7 @@ class ContainerGenerator extends AbstractGeneratorCommand
                 $filamentVersion = select(
                     label: 'Which version of filament would you like?',
                     options: [
-                        //'filament2' => 'Filament v2',
+                        'filament2' => 'Filament v2',
                         'filament3' => 'Filament v3',
                     ],
                     default: 'filament3',
