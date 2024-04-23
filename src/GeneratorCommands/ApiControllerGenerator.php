@@ -68,7 +68,7 @@ class ApiControllerGenerator extends AbstractGeneratorCommand
             $bodyOfStoreFunction = "return app(Create{$name}Action::class)->run(\$requestDTO)\n            ->only('id');";
             $bodyOfShowFunction = "return app(Get{$name}ByIdAction::class)->run(\$id);";
             $bodyOfUpdateFunction = "return app(Update{$name}ByIdAction::class)->run(\$requestDTO, \$id)\n            ->only('id');";
-            $bodyOfDestroyFunction = "app(Delete{$name}ByIdAction::class)->run(\$id);\n\nreturn response()->noContent();";
+            $bodyOfDestroyFunction = "app(Delete{$name}ByIdAction::class)->run(\$id);\n\n        return response()->noContent();";
 
             $phpDocOfIndexFunction = "/**\n     * Get $name list\n     *\n     * @return {$name}DTO[]\n     */";
             $phpDocOfStoreFunction = "/**\n     * Create $name\n     *\n     * @return array{id: string}\n     */";
@@ -80,6 +80,7 @@ class ApiControllerGenerator extends AbstractGeneratorCommand
         return [
             '{{ name }}' => $name,
             '{{ useNamespaces }}' => $useNamespaces,
+            '{{ containerNamespace }}' => $this->getContainerNamespace(),
 
             '{{ bodyOfIndexFunction }}' => $bodyOfIndexFunction,
             '{{ bodyOfStoreFunction }}' => $bodyOfStoreFunction,

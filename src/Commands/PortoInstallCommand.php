@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AdminKit\Porto\Commands;
 
-use AdminKit\Porto\Actions\AddItemToFileArrayAction;
-use AdminKit\Porto\DTO\AddItemToFileArrayDTO;
+use AdminKit\Porto\Actions\AppendRowToFileArrayAction;
+use AdminKit\Porto\DTO\AppendRowToFileDTO;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
@@ -71,14 +71,25 @@ class PortoInstallCommand extends Command
     {
         $this->info("Importing ShipProvider...\n");
 
+        // laravel 11
+        $importFilePath = base_path('bootstrap/providers.php');
+        $appendRowDTO = new AppendRowToFileDTO(
+            appendRow: 'App\\Ship\\Providers\\ShipProvider::class,',
+            destinationFilePath: $importFilePath,
+        );
+
+        // support laravel 10
         if (! $this->file->exists(base_path('bootstrap/providers.php'))) {
-            $this->error("The bootstrap/providers.php file does not exist.\n");
+            $importFilePath = config_path('app.php');
+            $appendRowDTO = new AppendRowToFileDTO(
+                appendRow: 'App\Ship\Providers\ShipProvider::class',
+                destinationFilePath: $importFilePath,
+                beforeAppendRow: "'providers' => ServiceProvider::defaultProviders()->merge([",
+                AfterAppendRow: '])->toArray(),'
+            );
         }
 
-        $result = app(AddItemToFileArrayAction::class)->run(AddItemToFileArrayDTO::from([
-            'appendRow' => 'App\\Ship\\Providers\\ShipProvider::class,',
-            'destinationFilePath' => base_path('bootstrap/providers.php'),
-        ]));
+        $result = app(AppendRowToFileArrayAction::class)->run($appendRowDTO);
 
         if ($result === true) {
             $this->info("The ShipProvider has already imported.\n");

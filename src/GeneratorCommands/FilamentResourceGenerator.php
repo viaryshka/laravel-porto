@@ -34,6 +34,7 @@ class FilamentResourceGenerator extends AbstractGeneratorCommand
             '{{ label }}' => $name,
             '{{ pluralLabel }}' => Str::plural($name),
             '{{ resourceNamespace }}' => $this->qualifyClass($this->getNameInput()),
+            '{{ filamentId }}' => Str::lower($name),
         ];
     }
 

@@ -2,7 +2,6 @@
 
 namespace {{ namespace }};
 
-use AdminKit\Porto\Facades\Porto;
 use {{ resourceNamespace }};
 use Filament\Contracts\Plugin;
 use Filament\Panel;
@@ -11,7 +10,7 @@ class {{ modelName }}FilamentPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'admin-kit-{{ modelName }}';
+        return 'admin-kit-{{ filamentId }}';
     }
 
     public function register(Panel $panel): void

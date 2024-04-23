@@ -6,7 +6,7 @@ namespace AdminKit\Porto\DTO;
 
 use Spatie\LaravelData\Data;
 
-class AddItemToFileArrayDTO extends Data
+class AppendRowToFileDTO extends Data
 {
     public function __construct(
         public string $appendRow,

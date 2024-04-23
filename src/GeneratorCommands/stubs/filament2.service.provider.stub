@@ -1,0 +1,15 @@
+<?php
+
+namespace {{ providerNamespace }};
+
+use {{ resourceNamespace }};
+use Filament\PluginServiceProvider;
+
+class FilamentServiceProvider extends PluginServiceProvider
+{
+    public static string $name = '{{ filamentId }}';
+
+    protected array $resources = [
+        {{ modelName }}Resource::class,
+    ];
+}

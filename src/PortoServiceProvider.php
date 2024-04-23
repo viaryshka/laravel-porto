@@ -11,6 +11,7 @@ use AdminKit\Porto\GeneratorCommands\ApiResourceGenerator;
 use AdminKit\Porto\GeneratorCommands\ApiRoutesGenerator;
 use AdminKit\Porto\GeneratorCommands\ContainerGenerator;
 use AdminKit\Porto\GeneratorCommands\FactoryGenerator;
+use AdminKit\Porto\GeneratorCommands\Filament2ResourceGenerator;
 use AdminKit\Porto\GeneratorCommands\FilamentResourceGenerator;
 use AdminKit\Porto\GeneratorCommands\MigrationGenerator;
 use AdminKit\Porto\GeneratorCommands\ModelGenerator;
@@ -36,6 +37,7 @@ class PortoServiceProvider extends PackageServiceProvider
                 ApiResourceGenerator::class,
                 ApiRequestGenerator::class,
                 FilamentResourceGenerator::class,
+                Filament2ResourceGenerator::class,
                 ContainerGenerator::class,
                 ApiActionGenerator::class,
                 ApiDTOGenerator::class,
