@@ -12,7 +12,6 @@ All notable changes to `Porto` will be documented in this file.
 - feat: add ContainerGenerator command
 - feat: add --resource option in ControllerGenerator command
 - feat: add --requests parameter in ControllerGenerator
-- feat: add FilamentResourceGenerator command
 - feat: add MigrationGenerator command
 - feat: add FactoryGenerator command
 - feat: add ApiRequestGenerator command

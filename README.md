@@ -8,7 +8,6 @@
 ## Requirements
 
 - Laravel 11
-- Filament 3
 - Spatie/Laravel-Data v4
 
 ## Roadmap
@@ -16,7 +15,6 @@
 - [x] Add Ship folder generator command
 - [x] Auto import MainServiceProvider to ShipProvider
 - [x] Remove RouteServiceProvider
-- [x] Support Filament v3, add FilamentPlugin to generator
 - [x] Update Porto installing documentation
 
 ## Installation
@@ -82,9 +80,6 @@ Container
 	    ├── CLI
 	    │   ├── Routes
 	    │   └── Commands
-	    └── Filament
-	        ├── Resources
-	        └── FilamentPlugin.php
 ```
 
 ## Testing
